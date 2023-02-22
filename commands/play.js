@@ -28,7 +28,6 @@ exports.run = async (client, message, args) => {
     const result = await node.rest.resolve(`ytsearch:${query}`);
     if (!result?.tracks.length) return;
     const metadata = result.tracks.shift();
-    client.queue.push(metadata);
     const embed = {
         color: 0xd65076,
         title: 'Added Track',
@@ -36,11 +35,17 @@ exports.run = async (client, message, args) => {
     };
     await message.channel.send({ embeds: [embed] });
 
-    const player = await node.joinChannel({
-        guildId: message.guildId.toString(),
-        channelId: member.voice.channel.id.toString(),
-        shardId: 0
-    });
+    const memberBot = message.guild.members.cache.find(member => member.id === client.user.id);
+    let player = null;
+    if (!memberBot.voice.channel) {
+        player = await node.joinChannel({
+            guildId: message.guildId.toString(),
+            channelId: member.voice.channel.id.toString(),
+            shardId: 0
+        });
+    } else {
+        player = node.players.get(message.guild.id);
+    }
     await player.playTrack({ track: metadata.encoded });
 };
 
