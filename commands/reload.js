@@ -5,6 +5,7 @@ exports.run = (client, message, args) => {
         return message.reply('That command does not exist.');
     }
 
+    // Refresh cache of command
     delete require.cache[require.resolve(`./${commandName}.js`)];
     client.commands.delete(commandName);
     const props = require(`./${commandName}.js`);

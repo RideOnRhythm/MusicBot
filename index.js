@@ -16,12 +16,15 @@ const client = new Client({
         GatewayIntentBits.GuildVoiceStates
     ]
 });
+// Initialize client and add Shoukaku connector
 const shoukaku = new Shoukaku(new Connectors.DiscordJS(client), Nodes);
 shoukaku.on('error', (_, error) => console.error(error));
 client.shoukaku = shoukaku;
 client.config = config;
 client.commands = new Collection();
+client.queue = [];
 
+// Register events and commands from their respective folders
 const events = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
 for (const file of events) {
     const eventName = file.split('.')[0];
