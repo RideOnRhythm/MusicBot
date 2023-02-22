@@ -42,6 +42,6 @@ exports.run = async (client, message, args) => {
         shardId: 0
     });
     await player.playTrack({ track: metadata.encoded });
-}
+};
 
 exports.name = 'play';
