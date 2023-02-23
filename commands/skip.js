@@ -7,7 +7,7 @@ exports.run = async (client, message, args) => {
         return;
     }
 
-    const skip = require('play.js');
+    const skip = require('./play.js');
     skip.skip(client, player, message.channel);
 };
 

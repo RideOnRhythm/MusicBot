@@ -52,7 +52,7 @@ async function playNext (client, player, channel) {
 
 async function skip (client, player, channel) {
     if (client.queue.length !== 0) {
-        playNext(client, player, channel);
+        await player.stopTrack();
     }
 }
 
