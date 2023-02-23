@@ -1,6 +1,7 @@
 let isPlaying = false;
 const listened = [];
 
+// Converts milliseconds to a time string format
 function msToTime (s) {
     function pad (n, z) {
         z = z || 2;
@@ -20,6 +21,7 @@ function msToTime (s) {
     return pad(hrs) + ':' + pad(mins) + ':' + pad(secs);
 }
 
+// Adds queue track and plays the next song in the queue if not currently playing music
 async function addQueueTrack (client, player, track, channel) {
     client.queue.push(track);
     if (!isPlaying) {
@@ -27,6 +29,7 @@ async function addQueueTrack (client, player, track, channel) {
     }
 }
 
+// Plays the next song in the queue or disconnects from the voice channel if the queue is empty
 async function playNext (client, player, channel) {
     if (client.queue.length !== 0) {
         const track = client.queue.shift();
@@ -67,6 +70,7 @@ exports.run = async (client, message, args) => {
     };
     await message.channel.send({ embeds: [embed] });
 
+    // Joins a voice channel if the bot is not in a voice channel, gets the current player otherwise
     const memberBot = message.guild.members.cache.find(member => member.id === client.user.id);
     let player = null;
     if (!memberBot.voice.channel) {
@@ -78,6 +82,7 @@ exports.run = async (client, message, args) => {
     } else {
         player = node.players.get(message.guild.id);
     }
+    // Plays the next track in the queue everytime each track ends
     if (!listened.includes(player)) {
         player.on('end', reason => {
             playNext(client, player, message.channel);

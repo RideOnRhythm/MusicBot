@@ -27,6 +27,7 @@ exports.run = async (client, message, args) => {
     }
     const track = player.trackMetadata;
 
+    // Progress bar of current playing track depending on current position
     const tempBar = '──────────';
     const index = player.position / track.info.length * 10 - 1;
     let progressBar = null;
