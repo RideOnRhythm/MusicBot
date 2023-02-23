@@ -65,6 +65,8 @@ exports.run = async (client, message, args) => {
     let searchQuery = '';
     if (!urlRe.exec(query)) {
         searchQuery = `ytsearch:${query}`;
+    } else {
+        searchQuery = query;
     }
     const result = await node.rest.resolve(searchQuery);
     if (!result?.tracks.length) return;
