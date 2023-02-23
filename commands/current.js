@@ -29,7 +29,7 @@ exports.run = async (client, message, args) => {
 
     // Progress bar of current playing track depending on current position
     const tempBar = '──────────';
-    const index = player.position / track.info.length * 10 - 1;
+    const index = Math.ceil(player.position / track.info.length * 10 - 1);
     let progressBar = null;
     if (player.position === 0) {
         progressBar = 'ㅇ─────────';
