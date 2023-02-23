@@ -1,3 +1,5 @@
+let isPlaying = false;
+
 function msToTime (s) {
     function pad (n, z) {
         z = z || 2;
@@ -11,7 +13,34 @@ function msToTime (s) {
     const mins = s % 60;
     const hrs = (s - mins) / 60;
 
+    if (hrs === 0) {
+        return pad(mins) + ':' + pad(secs);
+    }
     return pad(hrs) + ':' + pad(mins) + ':' + pad(secs);
+}
+
+async function addQueueTrack(client, player, track, channel) {
+    client.queue.push(track);
+    if (!isPlaying) {
+        playNext(client, player, channel);
+    }
+}
+
+async function playNext(client, player, channel) {
+    if (client.queue.length !== 0) {
+        const track = client.queue.shift();
+        isPlaying = true;
+        const embed = {
+            color: 0xd65076,
+            title: 'Playing Track',
+            description: `**Title:** [${track.info.title}](${track.info.uri})\n**Length:** ${msToTime(track.info.length)}`
+        };
+        await channel.send({ embeds: [embed] });
+        await player.playTrack({ track: track.encoded });
+    } else {
+        isPlaying = false;
+        await player.stopTrack();
+    }
 }
 
 exports.run = async (client, message, args) => {
@@ -30,7 +59,7 @@ exports.run = async (client, message, args) => {
     const metadata = result.tracks.shift();
     const embed = {
         color: 0xd65076,
-        title: 'Added Track',
+        title: 'Added Track to Queue',
         description: `**Title:** [${metadata.info.title}](${metadata.info.uri})\n**Length:** ${msToTime(metadata.info.length)}`
     };
     await message.channel.send({ embeds: [embed] });
@@ -46,7 +75,7 @@ exports.run = async (client, message, args) => {
     } else {
         player = node.players.get(message.guild.id);
     }
-    await player.playTrack({ track: metadata.encoded });
+    await addQueueTrack(client, player, metadata, message.channel);
 };
 
 exports.name = 'play';

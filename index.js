@@ -22,6 +22,7 @@ shoukaku.on('error', (_, error) => console.error(error));
 client.shoukaku = shoukaku;
 client.config = config;
 client.commands = new Collection();
+client.queue = [];
 
 // Register events and commands from their respective folders
 const events = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
