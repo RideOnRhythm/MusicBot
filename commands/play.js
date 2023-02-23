@@ -1,4 +1,5 @@
 let isPlaying = false;
+const listened = [];
 
 function msToTime (s) {
     function pad (n, z) {
@@ -19,14 +20,14 @@ function msToTime (s) {
     return pad(hrs) + ':' + pad(mins) + ':' + pad(secs);
 }
 
-async function addQueueTrack(client, player, track, channel) {
+async function addQueueTrack (client, player, track, channel) {
     client.queue.push(track);
     if (!isPlaying) {
         playNext(client, player, channel);
     }
 }
 
-async function playNext(client, player, channel) {
+async function playNext (client, player, channel) {
     if (client.queue.length !== 0) {
         const track = client.queue.shift();
         isPlaying = true;
@@ -37,9 +38,11 @@ async function playNext(client, player, channel) {
         };
         await channel.send({ embeds: [embed] });
         await player.playTrack({ track: track.encoded });
+        player.trackMetadata = track;
     } else {
         isPlaying = false;
         await player.stopTrack();
+        await player.node.leaveChannel(channel.guildId.toString());
     }
 }
 
@@ -74,6 +77,12 @@ exports.run = async (client, message, args) => {
         });
     } else {
         player = node.players.get(message.guild.id);
+    }
+    if (!listened.includes(player)) {
+        player.on('end', reason => {
+            playNext(client, player, message.channel);
+        });
+        listened.push(player);
     }
     await addQueueTrack(client, player, metadata, message.channel);
 };
