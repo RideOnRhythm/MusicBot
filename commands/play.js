@@ -50,6 +50,12 @@ async function playNext (client, player, channel) {
     }
 }
 
+async function skip (client, player, channel) {
+    if (client.queue.length !== 0) {
+        playNext(client, player, channel);
+    }
+}
+
 exports.run = async (client, message, args) => {
     let query = args.join(' ');
     query = query.replace(/(^<>)|(<>$)/g, '');
@@ -101,3 +107,4 @@ exports.run = async (client, message, args) => {
 };
 
 exports.name = 'play';
+exports.skip = skip;
