@@ -1,5 +1,6 @@
 let isPlaying = false;
 const listened = [];
+const urlRe = /https?:\/\/(?:www\.)?.+/;
 
 // Converts milliseconds to a time string format
 function msToTime (s) {
@@ -50,7 +51,8 @@ async function playNext (client, player, channel) {
 }
 
 exports.run = async (client, message, args) => {
-    const query = args.join(' ');
+    let query = args.join(' ');
+    query = query.replace(/(^<>)|(<>$)/g, '');
     const node = client.shoukaku.getNode();
     if (!node) return;
 
@@ -60,7 +62,11 @@ exports.run = async (client, message, args) => {
         return;
     }
 
-    const result = await node.rest.resolve(`ytsearch:${query}`);
+    let searchQuery = '';
+    if (!urlRe.exec(query)) {
+        searchQuery = `ytsearch:${query}`;
+    }
+    const result = await node.rest.resolve(searchQuery);
     if (!result?.tracks.length) return;
     const metadata = result.tracks.shift();
     const embed = {
