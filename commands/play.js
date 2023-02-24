@@ -58,7 +58,7 @@ async function skip (client, player, channel) {
 
 exports.run = async (client, message, args) => {
     let query = args.join(' ');
-    query = query.replace(/(^<>)|(<>$)/g, '');
+    query = query.replace(/(^[<>])|([<>]$)/g, '');
     const node = client.shoukaku.getNode();
     if (!node) return;
 
@@ -68,6 +68,7 @@ exports.run = async (client, message, args) => {
         return;
     }
 
+    // Checks if the query is a link, otherwise searches with YouTube
     let searchQuery = '';
     if (!urlRe.exec(query)) {
         searchQuery = `ytsearch:${query}`;

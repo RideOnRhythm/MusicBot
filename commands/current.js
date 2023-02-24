@@ -1,6 +1,6 @@
 const msToTime = require('./play.js');
 
-async function getProgressBar(player, track) {
+async function getProgressBar (player, track) {
     // Progress bar of current playing track depending on current position
     const tempBar = '──────────';
     const index = Math.ceil(player.position / track.info.length * 10 - 1);
