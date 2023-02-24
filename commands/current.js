@@ -1,20 +1,16 @@
-function msToTime (s) {
-    function pad (n, z) {
-        z = z || 2;
-        return ('00' + n).slice(-z);
-    }
+const msToTime = require('./play.js');
 
-    const ms = s % 1000;
-    s = (s - ms) / 1000;
-    const secs = s % 60;
-    s = (s - secs) / 60;
-    const mins = s % 60;
-    const hrs = (s - mins) / 60;
-
-    if (hrs === 0) {
-        return pad(mins) + ':' + pad(secs);
+async function getProgressBar(player, track) {
+    // Progress bar of current playing track depending on current position
+    const tempBar = '──────────';
+    const index = Math.ceil(player.position / track.info.length * 10 - 1);
+    let progressBar = null;
+    if (player.position === 0) {
+        progressBar = 'ㅇ─────────';
+    } else {
+        progressBar = tempBar.slice(0, index) + 'ㅇ' + tempBar.slice(index + 1);
     }
-    return pad(hrs) + ':' + pad(mins) + ':' + pad(secs);
+    return progressBar;
 }
 
 exports.run = async (client, message, args) => {
@@ -27,21 +23,14 @@ exports.run = async (client, message, args) => {
     }
     const track = player.trackMetadata;
 
-    // Progress bar of current playing track depending on current position
-    const tempBar = '──────────';
-    const index = Math.ceil(player.position / track.info.length * 10 - 1);
-    let progressBar = null;
-    if (player.position === 0) {
-        progressBar = 'ㅇ─────────';
-    } else {
-        progressBar = tempBar.slice(0, index) + 'ㅇ' + tempBar.slice(index + 1);
-    }
+    const progressBar = getProgressBar(player, track);
     const embed = {
         color: 0xd65076,
         title: 'Current Song',
-        description: `**Title:** [${track.info.title}](${track.info.uri})\n**Position:** ${msToTime(player.position)} ${progressBar} ${msToTime(track.info.length)}`
+        description: `**Title:** [${track.info.title}](${track.info.uri})\n**Position:** ${msToTime.msToTime(player.position)} ${progressBar} ${msToTime.msToTime(track.info.length)}`
     };
     await message.channel.send({ embeds: [embed] });
 };
 
 exports.name = 'current';
+exports.getProgressBar = getProgressBar;

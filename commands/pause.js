@@ -7,8 +7,8 @@ exports.run = async (client, message, args) => {
         return;
     }
 
-    await player.stopTrack();
-    await message.channel.send('Stopped playing music.');
+    await player.setPaused(true);
+    await message.channel.send('Paused music.');
 };
 
-exports.name = 'stop';
+exports.name = 'pause';

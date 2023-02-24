@@ -1,5 +1,3 @@
-const skip = require('./play.js');
-
 exports.run = async (client, message, args) => {
     const node = client.shoukaku.getNode();
     if (!node) return;
@@ -9,7 +7,8 @@ exports.run = async (client, message, args) => {
         return;
     }
 
-    skip.skip(client, player, message.channel);
+    await player.resume();
+    await message.channel.send('Resumed music.');
 };
 
-exports.name = 'skip';
+exports.name = 'resume';

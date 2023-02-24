@@ -17,9 +17,9 @@ function msToTime (s) {
     const hrs = (s - mins) / 60;
 
     if (hrs === 0) {
-        return pad(mins) + ':' + pad(secs);
+        return mins.toString() + ':' + pad(secs);
     }
-    return pad(hrs) + ':' + pad(mins) + ':' + pad(secs);
+    return hrs.toString() + ':' + pad(mins) + ':' + pad(secs);
 }
 
 // Adds queue track and plays the next song in the queue if not currently playing music
@@ -108,3 +108,4 @@ exports.run = async (client, message, args) => {
 
 exports.name = 'play';
 exports.skip = skip;
+exports.msToTime = msToTime;
