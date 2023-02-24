@@ -23,7 +23,7 @@ exports.run = async (client, message, args) => {
     }
     const track = player.trackMetadata;
 
-    const progressBar = getProgressBar(player, track);
+    const progressBar = await getProgressBar(player, track);
     const embed = {
         color: 0xd65076,
         title: 'Current Song',
