@@ -1,5 +1,3 @@
-const { Player } = require('shoukaku');
-
 exports.run = async (client, message, args) => {
     const node = client.shoukaku.getNode();
     if (!node) return;
