@@ -1,5 +1,5 @@
 exports.run = async (client, message, args) => {
-    const node = client.shoukaku.getNode();
+    const node = client.kazagumo;
     if (!node) return;
     const player = node.players.get(message.guild.id);
 
@@ -7,9 +7,9 @@ exports.run = async (client, message, args) => {
     if (player === undefined) {
         nodeString = 'Not connected.';
     } else {
-        nodeString = Math.round(player.ping).toString();
+        nodeString = Math.round(player.kazagumo.ping).toString() + 'ms';
     }
-    await message.channel.send(`Bot Ping: ${Math.round(client.ws.ping)}ms\nNode Ping: ${nodeString}ms`);
+    await message.channel.send(`Bot Ping: ${Math.round(client.ws.ping)}ms\nNode Ping: ${nodeString}`);
 };
 
 exports.name = 'ping';

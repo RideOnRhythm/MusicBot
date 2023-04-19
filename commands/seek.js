@@ -2,7 +2,7 @@ const msToTime = require('./play.js');
 const getProgressBar = require('./current.js');
 
 exports.run = async (client, message, args) => {
-    const node = client.shoukaku.getNode();
+    const node = client.kazagumo;
     if (!node) return;
     const player = node.players.get(message.guild.id);
     if (player === undefined) {
@@ -23,10 +23,10 @@ exports.run = async (client, message, args) => {
         ms *= 1000;
     }
 
-    await player.seekTo(ms);
-    const track = player.trackMetadata;
-    const progressBar = await getProgressBar.getProgressBar(player, track);
-    await message.channel.send(`Seeked the position to. ${msToTime.msToTime(ms)}\n**New Position:** ${msToTime.msToTime(player.position)} ${progressBar} ${msToTime.msToTime(track.info.length)}`);
+    await player.seek(ms);
+    const track = player.track;
+    const progressBar = await getProgressBar.getProgressBar(ms, track);
+    await message.channel.send(`Seeked the position to. ${msToTime.msToTime(ms)}\n**New Position:** ${msToTime.msToTime(ms)} ${progressBar} ${msToTime.msToTime(track.length)}`);
 };
 
 exports.name = 'seek';

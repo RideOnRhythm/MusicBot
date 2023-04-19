@@ -1,5 +1,5 @@
 exports.run = async (client, message, args) => {
-    const node = client.shoukaku.getNode();
+    const node = client.kazagumo;
     if (!node) return;
     const player = node.players.get(message.guild.id);
     if (player === undefined) {
@@ -7,8 +7,8 @@ exports.run = async (client, message, args) => {
         return;
     }
 
-    await player.resume();
-    await message.channel.send('Resumed music.');
+    player.destroy();
 };
 
-exports.name = 'resume';
+exports.name = 'dc';
+exports.aliases = ['disconnect', 'stop'];

@@ -1,5 +1,5 @@
 exports.run = async (client, message, args) => {
-    const node = client.shoukaku.getNode();
+    const node = client.kazagumo;
     if (!node) return;
     const player = node.players.get(message.guild.id);
     if (player === undefined) {
@@ -9,9 +9,9 @@ exports.run = async (client, message, args) => {
 
     const volume = Number(args[0]);
     if (volume < 0 || volume > 1000) {
-        await message.channel.send('You can only set the volume between 0% and 1000.%');
+        await message.channel.send('You can only set the volume between 0% and 1000%.');
     }
-    await player.setVolume(volume / 100);
+    await player.setVolume(volume);
     await message.channel.send(`Set the volume to ${volume}%.`);
 };
 

@@ -1,7 +1,5 @@
-const skip = require('./play.js');
-
 exports.run = async (client, message, args) => {
-    const node = client.shoukaku.getNode();
+    const node = client.kazagumo;
     if (!node) return;
     const player = node.players.get(message.guild.id);
     if (player === undefined) {
@@ -9,7 +7,7 @@ exports.run = async (client, message, args) => {
         return;
     }
 
-    skip.skip(client, player, message.channel);
+    player.skip();
 };
 
 exports.name = 'skip';
