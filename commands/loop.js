@@ -39,7 +39,7 @@ exports.run = async (client, message, args) => {
                 title: 'Looping Current Track',
                 description: `**Title:** [${track.title}](${track.uri})\n**Length:** ${msToTime(track.length)}`
             };
-            await message.channel.send({ embed: [embed] });
+            await message.channel.send({ embeds: [embed] });
         }
     }
 };
